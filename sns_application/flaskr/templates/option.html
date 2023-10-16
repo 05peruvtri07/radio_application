@@ -1,0 +1,19 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}
+設定 - {{ super() }}
+{% endblock %}
+{% block content %}
+<ul>
+    <li>
+        <a class=user_option href="{{url_for('app.user')}}">
+            ユーザ情報編集
+        </a>
+    </li>
+    <li>
+        <a class=delete href="{{url_for('app.delete')}}">
+            退会
+        </a>
+    </li>
+</ul>
+{% endblock %}
