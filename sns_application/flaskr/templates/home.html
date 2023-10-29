@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <div class="row">
+    <!-- ログイン時 -->
     {% if current_user.is_authenticated %}
     <div class="col-lg-2 offset-lg-2">
         {% if current_user.picture_path %}
@@ -68,8 +69,12 @@
             </tr>
             {% endfor %}
     </div>
+    <!-- 非ログイン時 -->
     {% else %}
+        <h1>ラジオ職人のための便利なツールを提供します。</h1>
         <p>ログイン or 登録をしてください</p>
+        <p><a href="mailto:info&#64;example.com" class="btn btn-link">info&#64;example.com</a></p>
+        <p><a href="mailto:recipient@email.com?body=Message%20body%20text%20" class="btn btn-link">お問い合わせ</a></p>
     {% endif %}
 </div>
 {% endblock %}

@@ -124,14 +124,20 @@ body{
 	margin-right: 10px;
 }
 
-#submit {
+/* #submit { 
 	height: 35px;
 	margin-bottom: 15px;
 	width: 120px;
 	border: none;
 	cursor: pointer;
-}
+}*/
 
+#submit {
+	color: beige;
+	background-color:  rgb(18, 18, 16);
+	border-radius: 20px;
+	box-shadow: 0 2px 2px 0;
+}
 
 tr,td {
 	border: none;

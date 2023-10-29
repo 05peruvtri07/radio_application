@@ -6,3 +6,4 @@ flask-bcrypt
 wtforms
 email-validator
 werkzeug
+pyperclip

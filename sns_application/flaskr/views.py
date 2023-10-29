@@ -5,19 +5,21 @@ from flask import (
 )
 from flask_login import login_user, login_required, logout_user, current_user
 from flaskr.models import(
-    User, PasswordResetToken, UserConnect, Message,
+    User, PasswordResetToken, UserConnect, Message, 
 )
 from flaskr import db
 
 from flaskr.forms import (
     LoginForm, RegisterForm,ResetPasswordForm,
     ForgotPasswordForm, UserForm, ChangePasswordForm, UserSearchForm, ConnectForm,
-    MessageForm, DeleteForm
+    MessageForm, DeleteForm, MailForm
 )
 from flaskr.utils.message_format import make_message_format
+import pyperclip
 
 bp = Blueprint('app', __name__, static_folder=None, url_prefix= '')
 
+# ホーム画面表示
 @bp.route('/')
 def home():
     friends = requested_friends = requesting_friends = None
@@ -35,11 +37,28 @@ def home():
         connect_form = connect_form
         )
 
+# メール作成
+@bp.route('/mail', methods=['GET', 'POST'])
+def mail():
+    neta_mail = ''
+    form = MailForm(request.form)
+    if request.method == 'POST' and form.validate():
+        to_email = form.to_email.data
+        mail_topic = form.mail_topic.data
+        mail_message = form.mail_message.data
+        neta_mail = f'mailto:{to_email}?subject={mail_topic}'
+        pyperclip.copy(mail_message)
+        # if current_user.is_authenticated:
+        return redirect(neta_mail)
+    return render_template('mail.html', form = form)
+
+# ログアウト
 @bp.route('/logout')
 def logout():
     logout_user() #ログアウト
     return redirect(url_for('app.home'))
 
+# ログイン
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
@@ -59,6 +78,7 @@ def login():
             flash('メールアドレスとパスワードの組み合わせが誤っています')
     return render_template('login.html',form=form)
 
+# ユーザ登録
 @bp.route('/register', methods=['GET','POST'])
 def register():
     form = RegisterForm(request.form)
@@ -79,6 +99,7 @@ def register():
         return redirect(url_for('app.login'))
     return render_template('register.html', form=form)
 
+# パスワード設定
 @bp.route('/reset_password/<uuid:token>', methods=['GET', 'POST'])
 def reset_password(token):
     form = ResetPasswordForm(request.form)
@@ -96,6 +117,7 @@ def reset_password(token):
         return redirect(url_for('app.login'))
     return render_template('reset_password.html',form=form)
 
+# パスワード再設定
 @bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     form = ForgotPasswordForm(request.form)
@@ -113,6 +135,7 @@ def forgot_password():
             flash('存在しないユーザです')
     return render_template('forgot_password.html', form=form)
 
+# ユーザ情報編集
 @bp.route('/user', methods=['GET', 'POST'])
 @login_required
 def user():
@@ -123,16 +146,22 @@ def user():
         # with db.session.begin(subtransactions=True):
         user.username = form.username.data
         user.email = form.email.data
+        # プロフィール画像を設定
         file = request.files[form.picture_path.name].read()
         if file:
             file_name = user_id + '_' + str(datetime.now().timestamp()) + '.jpg'
             picture_path ='flaskr/static/user_image/' + file_name
             open(picture_path, 'wb').write(file)
             user.picture_path = 'user_image/' + file_name
+        # 初期画像を設定
+        else :
+            user.picture_path = 'no_image/no_image.jpg'
+    
     db.session.commit()
     flash('ユーザ情報の更新に成功しました')
     return render_template('user.html', form=form)
 
+# パスワード変更
 @bp.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -146,6 +175,7 @@ def change_password():
         return redirect(url_for('app.user'))
     return render_template('change_password.html', form=form)
 
+# ユーザ検索
 @bp.route('user_search', methods=['GET', 'POST'])
 @login_required
 def user_search():
@@ -166,6 +196,7 @@ def user_search():
         'user_search.html', form=form, connect_form=connect_form, users=users 
     )
 
+# 友達申請
 @bp.route('/connect_user', methods=['POST'])
 @login_required
 def connect_user():
@@ -184,6 +215,7 @@ def connect_user():
     next_url = session.pop('url', 'app:home')
     return redirect(url_for(next_url))
 
+# メッセージ送受信
 @bp.route('/message/<id>', methods=['GET', 'POST'])
 @login_required
 def message(id):
@@ -213,16 +245,20 @@ def message(id):
     return render_template('message.html', form=form, messages=messages, to_user_id=id,
                            user=user
                           )
+
+# テーマ検索
 @bp.route('/theme_search')
 @login_required
 def theme_search():
     return render_template('theme_search.html')
 
+# オプション
 @bp.route('/option')
 @login_required
 def option():
     return render_template('option.html')
 
+# ユーザ削除
 @bp.route('/delete' , methods=['GET','POST'])
 @login_required
 def delete():
@@ -233,6 +269,7 @@ def delete():
         return redirect(url_for('app.home')) #ホームにもどる。
     return render_template('delete.html', form=form)
 
+# 既読処理
 @bp.route('/message_ajax', methods=['GET'])
 def message_ajax():
     user_id = request.args.get('user_id' , -1, type=int)
@@ -251,6 +288,7 @@ def message_ajax():
         db.session.commit()
     return jsonify(data= make_message_format(user, not_read_messages), checked_message_ids = not_checked_message_ids)
 
+# ページ読み込みエラー
 @bp.app_errorhandler(404)
 def page_not_found(e):
     return redirect(url_for('app.home'))

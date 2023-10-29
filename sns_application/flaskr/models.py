@@ -307,4 +307,29 @@ class Message(db.Model):
             cls.is_checked == 0
             )
         ).order_by(cls.id).all()
+
+class radio_program(db.Model):
+
+    __tablename__ = 'radio_program'
+
+    id = db.Column(db.Integer, primary_key=True)
+    program_name = db.Column(db.String(64), unique=True, index=True)
+    to_email = db.Column(db.String(64), unique=True, index=True)
+
+class mail(db.Model):
     
+    __tablename__ = 'mail'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    to_email = db.Column(db.String(64), unique=True, index=True)
+    mail_topic = db.Column(db.String(800), index=True)
+    mail_message = db.Column(db.String(800), index=True)
+    create_at = db.Column(db.DateTime, default=datetime.now)
+
+    def create_new_message(self):
+        db.session.add(self)
+
+
+#     @classmethod
+#     def select

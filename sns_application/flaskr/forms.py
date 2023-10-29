@@ -71,6 +71,7 @@ class UserForm(Form):
                 return False
         return True
 
+#パスワード変更フォーム
 class ChangePasswordForm(Form):
     password = PasswordField(
         'パスワード',
@@ -89,11 +90,13 @@ class UserSearchForm(Form):
     username = StringField('名前: ' , validators=[DataRequired()])
     submit = SubmitField('ユーザ検索')
 
+
 class ConnectForm(Form):
     connect_condition = HiddenField()
     to_user_id = HiddenField()
     submit = SubmitField()
 
+# メッセージ作成
 class MessageForm(Form):
     to_user_id = HiddenField()
     message = TextAreaField()
@@ -107,6 +110,14 @@ class MessageForm(Form):
             return False
         return True
 
+# メール作成フォーム
+class MailForm(Form):
+    to_email = TextAreaField()
+    mail_topic = TextAreaField()
+    mail_message = TextAreaField()
+    submit = SubmitField('メール作成')
+
+# ユーザ削除 
 class DeleteForm(Form):
     password = PasswordField(
         'パスワード',
