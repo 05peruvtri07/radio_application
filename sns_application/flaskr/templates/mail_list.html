@@ -1,0 +1,21 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}
+メール一覧 - {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>メール作成画面</h1>
+<div class="col-lg-8 offset-lg-2">
+    <h2>メール一覧</h2>
+    <table class="table table-bordered">
+        {% for mail in mail_list %}
+            <tr>
+                <td>{{ mail.to_email }}</td>
+                <td>{{ mail.mail_topic }}</td>
+                <td>{{ mail.mail_message }}</td>
+                <td>{{ mail.create_at }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

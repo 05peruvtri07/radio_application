@@ -112,9 +112,9 @@ class MessageForm(Form):
 
 # メール作成フォーム
 class MailForm(Form):
-    to_email = TextAreaField()
-    mail_topic = TextAreaField()
-    mail_message = TextAreaField()
+    to_email = TextAreaField('メールアドレス')
+    mail_topic = TextAreaField('件名')
+    mail_message = TextAreaField('本文※メール作成後クリップボードにコピーされます。')
     submit = SubmitField('メール作成')
 
 # ユーザ削除 

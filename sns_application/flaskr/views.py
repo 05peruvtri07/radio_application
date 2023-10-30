@@ -5,7 +5,7 @@ from flask import (
 )
 from flask_login import login_user, login_required, logout_user, current_user
 from flaskr.models import(
-    User, PasswordResetToken, UserConnect, Message, 
+    User, PasswordResetToken, UserConnect, Message, Mail
 )
 from flaskr import db
 
@@ -43,14 +43,24 @@ def mail():
     neta_mail = ''
     form = MailForm(request.form)
     if request.method == 'POST' and form.validate():
-        to_email = form.to_email.data
-        mail_topic = form.mail_topic.data
-        mail_message = form.mail_message.data
-        neta_mail = f'mailto:{to_email}?subject={mail_topic}'
-        pyperclip.copy(mail_message)
-        # if current_user.is_authenticated:
+        neta_mail = f'mailto:{form.to_email.data}?subject={form.mail_topic.data}'
+        pyperclip.copy(form.mail_message.data)
+        if current_user.is_authenticated:
+            mail = Mail (
+                user_id = current_user.get_id(),
+                to_email = form.to_email.data,
+                mail_topic = form.mail_topic.data,
+                mail_message = form.mail_message.data
+            )
+            mail.create_new_message()
+            db.session.commit()
         return redirect(neta_mail)
     return render_template('mail.html', form = form)
+
+@bp.route('/mail_list')
+def mail_list():
+    mail_list = Mail.select_mail_by_user_id(current_user.get_id())
+    return render_template('mail_list.html', mail_list = mail_list)
 
 # ログアウト
 @bp.route('/logout')
