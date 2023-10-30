@@ -322,9 +322,9 @@ class mail(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    to_email = db.Column(db.String(64), unique=True, index=True)
-    mail_topic = db.Column(db.String(800), index=True)
-    mail_message = db.Column(db.String(800), index=True)
+    to_email = db.Column(db.String(64), index=True)
+    mail_topic = db.Column(db.String(50), index=True, nullable=true)
+    mail_message = db.Column(db.String(800), nullable=true)
     create_at = db.Column(db.DateTime, default=datetime.now)
 
     def create_new_message(self):
