@@ -313,8 +313,20 @@ class Message(db.Model):
 #     __tablename__ = 'radio_program'
 
 #     id = db.Column(db.Integer, primary_key=True)
+#.    date = db.Column(db.String(1), default = NULL)
+#.    time = cb.Column(db.Datetime, default = NULL)
 #     program_name = db.Column(db.String(64), unique=True, index=True)
 #     to_email = db.Column(db.String(64), unique=True, index=True)
+
+#.    def create_new_program():
+#      	db.session.add(self)
+
+#.    @classmethod
+#.      def today_radioprogram(cls,date):
+#        return cls.query.filter(date==date).all()
+#     @classmethod
+#     def select
+            
 
 class Mail(db.Model):
     
