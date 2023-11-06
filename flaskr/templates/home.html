@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}
+ホーム - {{ super() }}
+{% endblock %}
+{% block content %}
+<div class="row">
+    <!-- ログイン時 -->
+    {% if current_user.is_authenticated %}
+    <div class="col-lg-2 offset-lg-2">
+        {% if current_user.picture_path %}
+            <img class="home-userimage user-image-big" img src="{{ url_for('static', filename=current_user.picture_path)}}">
+        {% endif %}
+    </div>
+    <div class="home-user col-lg-4 offset=lg-2">
+        <p>ユーザー名: {{ current_user.username }}</p>
+        <p>メールアドレス: {{ current_user.email}}</p>
+    </div>
+    <div class="col-lg-8 offset-lg-2">
+        <h2>友達一覧</h2>
+        <table class="table table-bordered">
+            {% for friend in friends %}
+                <tr>
+                    {% if friend.picture_path %}
+                    <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
+                    <td>{{ friend.username }}</td>
+                    <td><a href="{{ url_for('app.message', id=friend.id)}}" class="btn btn-link">メッセージを送る</a></td>
+                    {% else %}
+                    <td>{{ friend.username }}</td>
+                    <td><a href="{{ url_for('app.message', id=friend.id)}}" class="btn btn-link">メッセージを送る</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-lg-8 offset-lg-2">
+        <h2>以下の人が友達申請しています</h2>
+        <table class="table table-borderd">
+            {% for friend in requested_friends %}
+                <tr>
+                    {% if friends.picture_path %}
+                    <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td>{{ friend.username }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('app.connect_user')}}">
+                            {{ connect_form.csrf_token }}
+                            {{ connect_form.connect_condition(value='accept') }}
+                            {{ connect_form.to_user_id(value=friend.id) }}
+                            {{ connect_form.submit(class='btn btn-primary', value='友達申請承認する') }}
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="col-lg-8 offset-lg-2">
+        <h2>承認待ちの友達です</h2>
+        <table class ="table table-bordered">
+            {% for friend in requesting_friends %}
+            <tr>
+                {% if friend.picture_path %}
+                <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
+                {% else %}
+                <td></td>
+                {% endif %}
+                <td>{{ friend.username }}</td>    
+            </tr>
+            {% endfor %}
+    </div>
+    <!-- 非ログイン時 -->
+    {% else %}
+    <p>ログイン or 登録をしてください</p>
+            <!-- section01 -->
+            <section class="sec-01">
+              <div class="container">
+                <h2 class="main-title">はがき職人のための便利なツールを提供。</h2>
+                <div class="content">
+                  <div class="image">
+                    <img src="static/image/メール作成機能.jpeg" alt="" />
+                  </div>
+                  <div class="text-box">
+                    <h3>メール作成機能</h3>
+                    <p>
+                      ラジオに送るメールを作成し、リストにして保存しておくことができます。
+                      内容の変更も簡単にできます。
+                    </p>
+                  </div>
+                </div>
+                <div class="media-icons">
+                  <a href="#" class="icon"><i class="fab fa-facebook"></i></a>
+                  <a href="#" class="icon"><i class="fab fa-instagram"></i></a>
+                  <a href="#" class="icon"><i class="fab fa-twitter"></i></a>
+                  <a href="#" class="icon"><i class="fab fa-youtube"></i></a>
+                </div>
+              </div>
+            </section>
+        
+            <!-- section02 -->
+            <section class="sec-02">
+              <div class="container">
+                <h3 class="section-title">好きな番組について語り合おう</h3>
+                <div class="content">
+                  <div class="image">
+                    <img src="static/image/メッセージ機能.jpeg" alt="" />
+                  </div>
+                  <div class="info">
+                    <h4 class="info-title">メッセージ機能</h4>
+                    <p>
+                      友達にメッセージを送信することができます。
+                      ラジオの感想を共有しよう。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+        
+
+        
+            <script src="https://unpkg.com/scrollreveal"></script>
+            <script>
+              //共通のオプション設定
+              ScrollReveal({
+                reset: true,
+                distance: "60px",
+                duration: 2000, //2sかけてアニメーション
+                delay: 200 /* 0.2s後に発動 */,
+              });
+        
+              ScrollReveal().reveal(".main-title, .section-title", {
+                delay: 200,
+                origin: "left",
+              });
+              ScrollReveal().reveal(".sec-01 .image, .info", {
+                delay: 600,
+                origin: "bottom",
+              });
+              ScrollReveal().reveal(".text-box", {
+                delay: 700,
+                origin: "right",
+              });
+              ScrollReveal().reveal(".media-icons i", {
+                delay: 500,
+                origin: "bottom",
+                interval: 200,
+              });
+              ScrollReveal().reveal(".sec-02 .image", {
+                delay: 500,
+                origin: "top",
+              });
+              ScrollReveal().reveal(".media-info li", {
+                delay: 500,
+                origin: "left",
+                interval: 200,
+              });
+            </script>
+    {% endif %}
+</div>
+{% endblock %}
