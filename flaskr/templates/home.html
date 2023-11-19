@@ -12,73 +12,89 @@
         {% endif %}
     </div>
     <div class="home-user col-lg-4 offset=lg-2">
-        <p>ユーザー名: {{ current_user.username }}</p>
+        <p>ラジオネーム: {{ current_user.username }}</p>
         <p>メールアドレス: {{ current_user.email}}</p>
     </div>
     <div class="col-lg-8 offset-lg-2">
         <h2>友達一覧</h2>
-        <table class="table table-bordered">
-            {% for friend in friends %}
-                <tr>
-                    {% if friend.picture_path %}
+            {% if friends %}
+              <table class="table table-sm">
+                <thead>
+                  <th>アイコン</th>
+                  <th>ラジオネーム</th>
+                  <th></th>
+                </thead>
+                <tbody>
+                  {% for friend in friends %}
                     <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
                     <td>{{ friend.username }}</td>
                     <td><a href="{{ url_for('app.message', id=friend.id)}}" class="btn btn-link">メッセージを送る</a></td>
-                    {% else %}
-                    <td>{{ friend.username }}</td>
-                    <td><a href="{{ url_for('app.message', id=friend.id)}}" class="btn btn-link">メッセージを送る</a></td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </table>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <p>承認済の友達はいません。</p>
+            {% endif %}
+            
     </div>
     <div class="col-lg-8 offset-lg-2">
-        <h2>以下の人が友達申請しています</h2>
-        <table class="table table-borderd">
-            {% for friend in requested_friends %}
-                <tr>
-                    {% if friends.picture_path %}
-                    <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
-                    {% else %}
-                    <td></td>
-                    {% endif %}
-                    <td>{{ friend.username }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('app.connect_user')}}">
-                            {{ connect_form.csrf_token }}
-                            {{ connect_form.connect_condition(value='accept') }}
-                            {{ connect_form.to_user_id(value=friend.id) }}
-                            {{ connect_form.submit(class='btn btn-primary', value='友達申請承認する') }}
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+        <h2>友達申請中</h2>
+          {% if requested_friend %}
+            <table class="table table-sm">
+              <thead>
+                <th>アイコン</th>
+                <th>ラジオネーム</th>
+                <th></th>
+              </thead>
+              <tbody>
+                {% for friend in requested_friends %}
+                  <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
+                  <td>{{ friend.username }}</td>
+                  <td>
+                   <form method="POST" action="{{ url_for('app.connect_user')}}">
+                      {{ connect_form.csrf_token }}
+                      {{ connect_form.connect_condition(value='accept') }}
+                      {{ connect_form.to_user_id(value=friend.id) }}
+                      {{ connect_form.submit(class='btn btn-primary', value='友達申請承認する') }}
+                    </form>
+                  </td>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>現在申請中の友達はいません。</p>
+          {% endif %}
     </div>
     <div class="col-lg-8 offset-lg-2">
-        <h2>承認待ちの友達です</h2>
-        <table class ="table table-bordered">
-            {% for friend in requesting_friends %}
-            <tr>
-                {% if friend.picture_path %}
-                <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
-                {% else %}
-                <td></td>
-                {% endif %}
-                <td>{{ friend.username }}</td>    
-            </tr>
-            {% endfor %}
+        <h2>承認待ち</h2>
+          {% if requesting_friend %}
+            <table class="table table-sm">
+              <thead>
+                <th>アイコン</th>
+                <th>ラジオネーム</th>
+                <th></th>
+              </thead>
+              <tbody>
+                {% for friend in requesting_friends %}
+                  <td><img class="user-image-small" src="{{ url_for('static', filename=friend.picture_path)}}"></td>
+                  <td>{{ friend.username }}</td>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>現在承認待ちの友達はいません。</p>
+          {% endif %}
     </div>
     <!-- 非ログイン時 -->
     {% else %}
-    <p>ログイン or 登録をしてください</p>
+    <p>※ログイン or 登録をしてください</p>
             <!-- section01 -->
             <section class="sec-01">
               <div class="container">
-                <h2 class="main-title">はがき職人のための便利なツールを提供。</h2>
+                <h2 class="main-title">ラジオネームでつながるSNS</h2>
                 <div class="content">
                   <div class="image">
-                    <img src="static/image/メール作成機能.jpeg" alt="" />
+                    <img src="static/image/メール作成機能.svg" alt="" />
                   </div>
                   <div class="text-box">
                     <h3>メール作成機能</h3>
@@ -87,12 +103,6 @@
                       内容の変更も簡単にできます。
                     </p>
                   </div>
-                </div>
-                <div class="media-icons">
-                  <a href="#" class="icon"><i class="fab fa-facebook"></i></a>
-                  <a href="#" class="icon"><i class="fab fa-instagram"></i></a>
-                  <a href="#" class="icon"><i class="fab fa-twitter"></i></a>
-                  <a href="#" class="icon"><i class="fab fa-youtube"></i></a>
                 </div>
               </div>
             </section>
@@ -103,9 +113,9 @@
                 <h3 class="section-title">好きな番組について語り合おう</h3>
                 <div class="content">
                   <div class="image">
-                    <img src="static/image/メッセージ機能.jpeg" alt="" />
+                    <img src="static/image/メッセージ機能.svg" alt="" />
                   </div>
-                  <div class="info">
+                  <div class="text-box">
                     <h4 class="info-title">メッセージ機能</h4>
                     <p>
                       友達にメッセージを送信することができます。
@@ -139,11 +149,6 @@
               ScrollReveal().reveal(".text-box", {
                 delay: 700,
                 origin: "right",
-              });
-              ScrollReveal().reveal(".media-icons i", {
-                delay: 500,
-                origin: "bottom",
-                interval: 200,
               });
               ScrollReveal().reveal(".sec-02 .image", {
                 delay: 500,

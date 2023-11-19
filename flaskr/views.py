@@ -196,8 +196,8 @@ def user():
         # 初期画像を設定
         else :
             user.picture_path = 'no_image/no_image.jpg'
+        flash('ユーザ情報の更新に成功しました')
     db.session.commit()
-    flash('ユーザ情報の更新に成功しました')
     return render_template('user.html', form=form)
 
 # パスワード変更

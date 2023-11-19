@@ -21,6 +21,12 @@ body{
 	box-shadow: 0 2px 2px 0;
 }
 
+a:hover ,.btn:hover ,#submit:hover {
+	background-color: #3abec1;
+	color: #fff;
+	text-shadow: 1px 1px 0 #195253;
+}
+
 /* 画像サイズ */
 .home-userimage {
 	margin-top: 15px;
@@ -43,6 +49,23 @@ body{
     height: 50px;
 	border-radius: 10px;
 }
+
+/* ホーム画面 */
+.home-user {
+	display: flex;
+	flex-direction: column;
+	font-weight: bold;
+	border-radius: 20px;
+	border-style: double;
+	border-width: 3px;
+	border-color: rgb(39, 81, 67);
+	justify-content: center;
+	padding-left: 20px;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+/* 非ログイン時 */
+
 
 /* 余白 */
 .bottom-space {
@@ -71,33 +94,40 @@ body{
 }
 
 /* ユーザ画面 */
-.home-user {
-	font-weight: bold;
-	padding:50px ;
-	margin-top: 15px;
-	background-color:rgb(203, 203, 182);
-	border-radius: 20px;
-	border-style: double;
-	border-width: 3px;
-	border-color: rgb(39, 81, 67);
-}
 
-/* テーブル */
+
+/* テーブル_共通 */
 .table {
-	border: none;	
-	background-color:rgb(203, 203, 182);
-	border-collapse: collapse;
+	table-layout: fixed;
 	border-radius: 20px;
+	background-color:rgb(203, 203, 182);
 	border-style: double;
 	border-width: 3px;
 	border-color: rgb(39, 81, 67);
 	margin-bottom: 10px;
 }
 
-tr,td {
+td {
+	border: none;
+	vertical-align:middle;
+}
+
+/* テーブル_メールリスト画面 */
+.table-sm {
+	border-collapse: separate;
+	border-spacing: 0;
+	border-radius: 20px;
+}
+
+.m_list {
 	border: none;
 	font-weight: bold;
+	text-overflow: ellipsis;
+  	white-space: nowrap;
+	overflow: hidden;
+	max-width: 0px;
 }
+
 
 /* メッセージ画面 */
 .speech-bubble-dest {
@@ -167,7 +197,7 @@ html {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 80px 100px;
+	padding: 150px 100px;
 	color: #fff;
   }
   
@@ -205,7 +235,7 @@ html {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: contain;
 	border-radius: 10px;
 	z-index: 10;
   }
@@ -225,17 +255,7 @@ html {
 	font-size: 2em;
 	margin-bottom: 10px;
   }
-  
-  .media-icons {
-	margin-top: 100px;
-  }
-  
-  .media-icons a {
-	color: #fff;
-	font-size: 2em;
-	margin: 60px;
-  }
-  
+
   .section-title {
 	font-size: 3em;
 	margin-bottom: 80px;
