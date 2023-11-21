@@ -23,8 +23,8 @@
                     <td class = "m_list">{{ mail.mail_topic }}</td>
                     <td class = "m_list">{{ mail.mail_message }}</td>
                     <td class = "m_list">{{ mail.create_at.strftime('%Y年%m月%d日 %H:%m') }}</td>
-                    <td class = "m_list"><a href="{{ url_for('app.mail2', id = mail.id) }}" class="btn btn-link">参照作成</a></td>
-                    <td class = "m_list"><a href="{{ url_for('app.mail_delete', id = mail.id) }}" class="btn btn-link">削除</a></td>
+                    <td class = "m_list m_list_btn"><a href="{{ url_for('app.mail2', id = mail.id) }}" class="btn btn-link">参照作成</a></td>
+                    <td class = "m_list m_list_btn"><a href="{{ url_for('app.mail_delete', id = mail.id) }}" class="btn btn-link">削除</a></td>
                 </tr>
             {% endfor %}
             </tbody>

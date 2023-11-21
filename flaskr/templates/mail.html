@@ -10,7 +10,13 @@
     {{ form.csrf_token}}
     {{ render_field(form.to_email) }}
     {{ render_field(form.mail_topic) }}
+    {% if current_user.is_authenticated %}
+    {{ render_field(form.header) }}
+    {% endif %}
     {{ render_field(form.mail_message) }}
+    {% if current_user.is_authenticated %}
+    {{ render_field(form.footer) }}
+    {% endif %}
     {{ form.submit }}
     </form>
 </div>

@@ -41,10 +41,14 @@ def home():
 @bp.route('/mail', methods=['GET', 'POST'])
 def mail1():
     form = MailForm(request.form)
-    print(id)
-    if request.method == 'POST' and form.validate():
+    if request.method == 'GET' :
+        if current_user.is_authenticated:
+            user = User.select_user_by_id(current_user.get_id())
+            form.header.data = user.header
+            form.footer.data = user.footer
+    elif request.method == 'POST' and form.validate():
         neta_mail = f'mailto:{form.to_email.data}?subject={form.mail_topic.data}'
-        pyperclip.copy(form.mail_message.data)
+        pyperclip.copy(f'{form.header.data}\n{form.mail_message.data}\n{form.footer.data}')
         if current_user.is_authenticated:
             mail = Mail (
                 user_id = current_user.get_id(),
@@ -55,20 +59,23 @@ def mail1():
             mail.create_new_mail()
             db.session.commit()
         return redirect(neta_mail)
-    return render_template('mail.html', form = form)
+    return render_template('mail.html', form = form )
 
 # メール参照作成
 @bp.route('/mail/<int:id>', methods=['GET', 'POST'])
 def mail2(id):
     form = MailForm(request.form)
     if request.method == 'GET' :
+        user = User.select_user_by_id(current_user.get_id())
+        form.header.data = user.header
+        form.footer.data = user.footer
         r_mail = Mail.select_mail_by_id(id)
         form.to_email.data = r_mail.to_email
         form.mail_topic.data = r_mail.mail_topic
         form.mail_message.data = r_mail.mail_message
     elif request.method == 'POST' and form.validate():
         neta_mail = f'mailto:{form.to_email.data}?subject={form.mail_topic.data}'
-        pyperclip.copy(form.mail_message.data)
+        pyperclip.copy(f'{form.header.data}\n{form.mail_message.data}\n{form.footer.data}')
         if current_user.is_authenticated:
             mail = Mail (
                 user_id = current_user.get_id(),
@@ -186,6 +193,8 @@ def user():
         user = User.select_user_by_id(user_id)
         user.username = form.username.data
         user.email = form.email.data
+        user.header = form.header.data
+        user.footer = form.footer.data
         # プロフィール画像を設定
         file = request.files[form.picture_path.name].read()
         if file:

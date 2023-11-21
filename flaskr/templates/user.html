@@ -15,15 +15,17 @@
         <img class="user-image-big" img src ="{{url_for('static', filename=current_user.picture_path)}}">
         {% endif %}
     </div>
-    <div class="col-lg-4 offset-lg-2">
+    <div class="col-lg-4 offset-lg-2 user_option">
         <form method="POST" enctype="multipart/form-data">
             {{form.csrf_token}}
             {{render_field(form.username, value=current_user.username)}}
             {{render_field(form.email, value=current_user.email)}}
+            {{render_field(form.header, value=current_user.header)}}
+            {{render_field(form.footer, value=current_user.footer)}}
             {{render_field(form.picture_path)}}
             {{form.submit()}}
         </form>
-        <a href="{{url_for('app.change_password')}}">パスワードを変更する</a>
+        <a href="{{url_for('app.change_password')}}">パスワード変更</a>
         <a href="{{url_for('app.delete')}}">退会</a>
     </div>
 </div>

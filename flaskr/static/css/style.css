@@ -6,7 +6,7 @@ body{
 	background-color:rgb(203, 203, 182);	
 }
 
-/* アプリネーム */
+/* メニューバー */
 .app_name{
 	font-family: HGS創英角ﾎﾟｯﾌﾟ体;
 	color: rgb(203, 203, 182);
@@ -15,10 +15,12 @@ body{
 
 /* ボタン */
 .btn ,#submit {
-	color: beige;
+	color: beige;	
+	margin:5px;
 	background-color:  rgb(18, 18, 16);
 	border-radius: 20px;
 	box-shadow: 0 2px 2px 0;
+	text-decoration: none;
 }
 
 a:hover ,.btn:hover ,#submit:hover {
@@ -84,9 +86,13 @@ a:hover ,.btn:hover ,#submit:hover {
 	align-items: center;
 }
 
-#to_email, #mail_topic, #mail_message {
+#to_email, #mail_topic, #header, #mail_message, #footer {
 	background-color: rgb(228, 223, 218);
 	width: 600px
+}
+
+#header, #footer {
+	height: 150px;
 }
 
 #mail_message {
@@ -94,7 +100,11 @@ a:hover ,.btn:hover ,#submit:hover {
 }
 
 /* ユーザ画面 */
-
+.user_option {
+	display: flex;
+	flex-direction: column;
+	vertical-align: top;
+}
 
 /* テーブル_共通 */
 .table {
@@ -128,6 +138,9 @@ td {
 	max-width: 0px;
 }
 
+.m_list_btn {
+	text-align: center;
+}
 
 /* メッセージ画面 */
 .speech-bubble-dest {

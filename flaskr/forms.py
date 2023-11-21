@@ -59,6 +59,8 @@ class UserForm(Form):
     email = StringField('メール:', validators=[DataRequired(), Email('メールアドレスが誤っています')])
 
     username = StringField('名前:', validators=[DataRequired()])
+    header = StringField('ヘッダー:', validators=[DataRequired()])
+    footer = StringField('フッター:', validators=[DataRequired()])
     picture_path = FileField('ファイルアップロード')
     submit = SubmitField('登録情報更新')
 
@@ -115,7 +117,9 @@ class MessageForm(Form):
 class MailForm(Form):
     to_email = TextAreaField('メールアドレス')
     mail_topic = TextAreaField('件名')
+    header = TextAreaField('ヘッダー')
     mail_message = TextAreaField('本文※メール作成後クリップボードにコピーされます。')
+    footer = TextAreaField('フッター')
     submit = SubmitField('メール作成')
 
 # ユーザ削除 

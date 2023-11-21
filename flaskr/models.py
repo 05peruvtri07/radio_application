@@ -2,7 +2,7 @@ from flaskr import db, login_manager
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
 from sqlalchemy.orm import aliased
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, desc
 
 from datetime import datetime, timedelta
 from uuid import uuid4
@@ -23,6 +23,8 @@ class User(UserMixin, db.Model):
         default=generate_password_hash('snsflaskapp')
     )
     picture_path = db.Column(db.Text, default='no_image/no_image.jpg')
+    header = db.Column(db.String(300), index=True, nullable=True)
+    footer = db.Column(db.String(300), index=True, nullable=True)
     # 有効か無効かのフラグ
     is_active = db.Column(db.Boolean, unique=False, default=False)
     create_at = db.Column(db.DateTime, default=datetime.now)
@@ -349,7 +351,7 @@ class Mail(db.Model):
 
     @classmethod
     def select_mail_by_user_id(cls, user_id):
-        return cls.query.filter(cls.user_id==user_id).all()
+        return cls.query.filter(cls.user_id==user_id).order_by(desc(cls.create_at)).all()
     
     @classmethod
     def select_mail_by_id(cls, id):
