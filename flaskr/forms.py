@@ -57,10 +57,9 @@ class ForgotPasswordForm(Form):
 # ユーザ情報編集のForm
 class UserForm(Form):
     email = StringField('メール:', validators=[DataRequired(), Email('メールアドレスが誤っています')])
-
     username = StringField('名前:', validators=[DataRequired()])
-    header = StringField('ヘッダー:', validators=[DataRequired()])
-    footer = StringField('フッター:', validators=[DataRequired()])
+    header = TextAreaField('ヘッダー:')
+    footer = TextAreaField('フッター:')
     picture_path = FileField('ファイルアップロード')
     submit = SubmitField('登録情報更新')
 

@@ -92,7 +92,7 @@ a:hover ,.btn:hover ,#submit:hover {
 }
 
 #header, #footer {
-	height: 150px;
+	height: 100px;
 }
 
 #mail_message {
@@ -103,7 +103,6 @@ a:hover ,.btn:hover ,#submit:hover {
 .user_option {
 	display: flex;
 	flex-direction: column;
-	vertical-align: top;
 }
 
 /* テーブル_共通 */

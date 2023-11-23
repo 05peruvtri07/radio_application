@@ -188,7 +188,13 @@ def forgot_password():
 @login_required
 def user():
     form = UserForm(request.form)
-    if request.method == 'POST' and form.validate():
+    if request.method == 'GET' :
+        user = User.select_user_by_id(current_user.get_id())
+        form.username.data = user.username  
+        form.email.data = user.email  
+        form.header.data = user.header
+        form.footer.data = user.footer
+    elif request.method == 'POST' and form.validate():
         user_id = current_user.get_id()
         user = User.select_user_by_id(user_id)
         user.username = form.username.data
