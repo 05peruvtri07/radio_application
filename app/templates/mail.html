@@ -1,0 +1,23 @@
+{% from "_formhelpers.html" import render_field %}
+{% extends "base.html" %}
+{% block title %}
+メール作成 - {{ super() }}
+{% endblock %}
+{% block content %}
+<h1>メール作成画面</h1>
+<div class="row">
+    <form class="mail" method="POST">
+    {{ form.csrf_token}}
+    {{ render_field(form.to_email) }}
+    {{ render_field(form.mail_topic) }}
+    {% if current_user.is_authenticated %}
+    {{ render_field(form.header) }}
+    {% endif %}
+    {{ render_field(form.mail_message) }}
+    {% if current_user.is_authenticated %}
+    {{ render_field(form.footer) }}
+    {% endif %}
+    {{ form.submit }}
+    </form>
+</div>
+{% endblock %}
